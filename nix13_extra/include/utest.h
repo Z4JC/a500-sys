@@ -199,6 +199,10 @@ UTEST_C_FUNC __declspec(dllimport) int __stdcall QueryPerformanceFrequency(
 #include <time.h>
 #endif
 
+#if defined(__amiga__)
+int clock_gettime(clockid_t clk_id, struct timespec *tp);
+#endif
+
 #if defined(_MSC_VER) && (_MSC_VER < 1920)
 #define UTEST_PRId64 "I64d"
 #define UTEST_PRIu64 "I64u"
