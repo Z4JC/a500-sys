@@ -1,0 +1,30 @@
+VAMOS := vamos
+CC := m68k-amigaos-gcc
+CFLAGS := -Os -m68000 -mcrt=nix13 -Iinclude/ $(CFLAGS)
+BUILD_DIR := build-files
+
+OBJS := getcwd.o tests/test_main.o tests/test_getcwd.o
+TESTEXES := tests/test_getcwd.exe
+
+all: build
+	@
+
+clean:
+	rm -rf $(BUILD_DIR)
+
+build: $(OBJS) $(TESTEXES)
+	@
+
+tests/test_getcwd.exe: tests/test_getcwd.o getcwd.o $(BUILD_DIR)/tests
+	$(CC) $(CFLAGS) $(BUILD_DIR)/tests/test_main.o $(BUILD_DIR)/tests/test_getcwd.o $(BUILD_DIR)/getcwd.o -o $(BUILD_DIR)/$@ -lm
+
+%.o: %.c $(BUILD_DIR) $(BUILD_DIR)/tests
+	$(CC) $(CFLAGS) -c $< -o $(BUILD_DIR)/$@
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/tests:
+	mkdir -p $(BUILD_DIR)/tests
+
+.PHONY: all build
